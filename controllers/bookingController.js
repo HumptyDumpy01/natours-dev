@@ -96,12 +96,12 @@ exports.webhookCheckout = catchAsync(async function(req, res, next) {
   }
 
   // Handle the event
+  console.log(`Executing event.type: `, event.type);
+  console.log(`Executing event.data: `, event.data);
+  console.log(`Executing event.data.object: `, event.data.object);
   switch (event.type) {
     case 'checkout.session.completed':
-
-      if (event.data.object) {
-        createBookingCheckout(event.data.object);
-      }
+      createBookingCheckout(event.data.object);
       // Then define and call a function to handle the event checkout.session.completed
       break;
     // ... handle other event types
