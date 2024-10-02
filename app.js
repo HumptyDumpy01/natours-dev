@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const compression = require('compression');
 
 const AppError = require(`${__dirname}/utils/appError`);
 
@@ -96,6 +97,9 @@ app.use(hpp({
   // whitelist all query strings where duplicates are allowed
   whitelist: [`duration`, `ratingsQuantity`, `ratingsAverage`, `maxGroupSize`, `difficulty`, `price`]
 }));
+
+// this middleware works only FOR TEXT
+app.use(compression());
 
 if (process.env.NODE_ENV === `development`) {
   app.use(morgan('dev'));

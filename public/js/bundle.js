@@ -12902,7 +12902,7 @@ function _bookTour() {
         case 11:
           _context.prev = 11;
           _context.t0 = _context["catch"](0);
-          console.log(_context.t0);
+          console.error(_context.t0);
           (0, _alerts.showAlert)("error", "Failed to load payment intent!");
         case 15:
         case "end":
