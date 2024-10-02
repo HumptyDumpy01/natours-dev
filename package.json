@@ -4,7 +4,7 @@
   "description": "This is a Natours API Application",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "cross-env NODE_ENV=development nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production nodemon server.js",
     "lint": "eslint .",
     "debug": "ndb server.js",
@@ -18,6 +18,7 @@
     "@stripe/stripe-js": "^4.6.0",
     "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.3",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

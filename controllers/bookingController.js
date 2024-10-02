@@ -71,6 +71,10 @@ exports.createBookingCheckout = catchAsync(async function(req, res, next) {
 
 });
 
+exports.webhookCheckout = catchAsync(async function(req, res, next) {
+});
+
+
 exports.createBooking = factory.createOne(Booking, `Failed to create the booking!`, `The booking was successfully created!`);
 
 exports.getBooking = factory.getOne(Booking, `Failed to fetch the booking!`, `The booking was successfully fetched!`);

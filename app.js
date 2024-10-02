@@ -4,6 +4,7 @@ const express = require('express');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
 
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
@@ -11,8 +12,8 @@ const hpp = require('hpp');
 const compression = require('compression');
 const cors = require('cors');
 
+const { webhookCheckout } = require('./controllers/bookingController');
 const AppError = require(`${__dirname}/utils/appError`);
-
 const errorController = require(`${__dirname}/controllers/errorController`);
 
 const morgan = require('morgan');
@@ -59,43 +60,11 @@ const bookingRouter = require(`${__dirname}/routes/bookingRoutes`);
 // Security HTTP headers.
 app.use(helmet());
 
-/*app.use(
-  helmet.contentSecurityPolicy({
-    directives: {
-      defaultSrc: ['\'self\'', 'data:', 'blob:'],
-
-      baseUri: ['\'self\''],
-
-      fontSrc: ['\'self\'', 'https:', 'data:'],
-
-      scriptSrc: ['\'self\'', 'https://!*.cloudflare.com'],
-
-      // eslint-disable-next-line no-dupe-keys
-      scriptSrc: ['\'self\'', 'https://!*.stripe.com'],
-
-      // eslint-disable-next-line no-dupe-keys
-      scriptSrc: ['\'self\'', 'http:', 'https://!*.mapbox.com', 'data:'],
-
-      frameSrc: ['\'self\'', 'https://!*.stripe.com'],
-
-      objectSrc: ['\'none\''],
-
-      styleSrc: ['\'self\'', 'https:', 'unsafe-inline'],
-
-      workerSrc: ['\'self\'', 'data:', 'blob:'],
-
-      childSrc: ['\'self\'', 'blob:'],
-
-      imgSrc: ['\'self\'', 'data:', 'blob:'],
-
-      connectSrc: ['\'self\'', 'blob:', 'https://!*.mapbox.com'],
-
-      upgradeInsecureRequests: []
-    }
-  })
-);*/
-
 // enabling middleware
+
+// this route WON'T work with json but only with read stream.
+// that's why we should use this middleware before express.json
+app.post(`/webhook-checkout`, express.raw({ type: `application/json` }), webhookCheckout);
 
 // body parser
 app.use(express.json({
