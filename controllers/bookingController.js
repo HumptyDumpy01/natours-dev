@@ -79,7 +79,7 @@ async function createBookingCheckout(session) {
   console.log(`Executing tour: `, tour);
   const userEmail = session.customer_email;
   console.log(`Executing userEmail: `, userEmail);
-  const user = (await User.find({ email: userEmail })).id;
+  const user = (await User.find({ email: userEmail }))._id;
   console.log(`Executing user: `, user);
   const price = session.line_items[0].amount_total / 100;
   console.log(`Executing price: `, price);
