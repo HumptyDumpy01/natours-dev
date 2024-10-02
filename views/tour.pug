@@ -1,0 +1,84 @@
+extends base
+
+block append head
+  // some code..
+  // INFO: enable this to turn on the mapbox map
+  //<script src='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.js'></script>
+  //<link href='https://api.mapbox.com/mapbox-gl-js/v2.9.1/mapbox-gl.css' rel='stylesheet' />
+  //script(src='/js/mapbox.js' defer)
+  <script src="https://js.stripe.com/v3/"></script>
+
+include _reviewCard
+include _overviewBox
+include _userLogo
+
+block content
+  section.section-header
+    .header__hero
+      .header__hero-overlay &nbsp;
+      img.header__hero-img(src=`../img/tours/${tour.imageCover}`, alt=`${tour.title}`)
+
+    .heading-box
+      h1.heading-primary
+        span #{tour.title}
+      .heading-box__group
+        .heading-box__detail
+          svg.heading-box__icon: use(xlink:href='/img/icons.svg#icon-clock')
+          span.heading-box__text #{tour.duration} days
+        .heading-box__detail
+          svg.heading-box__icon: use(xlink:href='/img/icons.svg#icon-map-pin')
+          span.heading-box__text #{tour.startLocation.description}
+
+  section.section-description
+    .overview-box
+      div
+        .overview-box__group
+          h2.heading-secondary.ma-bt-lg Quick facts
+
+          - const date = tour.startDates[0];
+
+          +overviewBox('Next Date', `${date.toLocaleDateString(`en-US`, {
+            month: `long`, day: `numeric`
+          })}`, `calendar`)
+          +overviewBox('Difficulty', `${tour.difficulty}`, `trending-up`)
+          +overviewBox('Participants', `${tour.maxGroupSize} people`, `user`)
+          +overviewBox('Rating', `${tour.ratingsAverage} / 5`, `star`)
+
+        .overview-box__group
+          h2.heading-secondary.ma-bt-lg Your tour guides
+          each guide in tour.guides
+            +userLogo(guide.photo, guide.role, guide.name)
+
+    .description-box
+      h2.heading-secondary.ma-bt-lg About the #{tour.title}
+
+      - const paragraphs = tour.description.split(`\n`)
+      each par in paragraphs
+        p.description__text= par
+
+  section.section-pictures
+    each image, index in tour.images
+      .picture-box
+        img.picture-box__img(src=`/img/tours/${image}`, alt=`${tour.title} Image ${index + 1}` class=`picture-box__img--${index + 1}`)
+
+  section.section-map
+    div(data-locations=`${JSON.stringify(tour.locations)}`, id='map')
+
+  section.section-reviews
+    .reviews
+      each review in tour.reviews
+        +reviewCard(review.user.photo, review.user.name, review.review, review.rating)
+
+  section.section-cta
+    .cta
+      .cta__img.cta__img--logo
+        img(src='/img/logo-white.png', alt='Natours logo')
+      img.cta__img.cta__img--1(src=`/img/tours/${tour.images[1]}`, alt=`Tour Picture`)
+      img.cta__img.cta__img--2(src=`/img/tours/${tour.images[2]}`, alt=`Tour Picture`)
+      .cta__content
+        h2.heading-secondary What are you waiting for?
+        p.cta__text #{tour.duration} days. 1 adventure. Infinite memories. Make it yours today!
+        if user
+          button.btn.btn--green.span-all-rows#book-tour(data-tour-id=`${tour.id}`) Book tour now!
+        else
+          a(class='btn btn--green span-all-rows' href='/login') Login to Book Tour

@@ -1,0 +1,12 @@
+mixin reviewCard(userPhoto, userName, review, rating)
+  .reviews__card
+    .reviews__avatar
+      img.reviews__avatar-img(src=`/img/users/${userPhoto}`, alt=`${userName}`)
+      h6.reviews__user= userName
+    p.reviews__text= review
+    .reviews__rating
+      each star in [...Array(rating).keys()]
+        svg.reviews__star.reviews__star--active: use(xlink:href='/img/icons.svg#icon-star')
+      // Loop for empty stars
+      each star in [...Array(5 - rating).keys()]
+        svg.reviews__star.reviews__star--inactive: use(xlink:href='/img/icons.svg#icon-star')

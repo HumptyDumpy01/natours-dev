@@ -1,0 +1,5 @@
+mixin userLogo(photo, role, name)
+  .overview-box__detail
+    img.overview-box__img(src=`/img/users/${photo}`, alt=`${name}`)
+    span.overview-box__label #{role === `lead-guide` ? `lead guide` : role === `guide` ? `tour guide` : `intern`}
+    span.overview-box__text #{name}
