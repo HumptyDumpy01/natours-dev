@@ -7,6 +7,7 @@ const factory = require('./handlerFactory');
 
 const dotenv = require('dotenv');
 const Booking = require('../models/bookingModel');
+const User = require('../models/userModel');
 
 dotenv.config({
   path: `${__dirname}/../config.env`
@@ -45,7 +46,8 @@ exports.createPaymentSession = catchAsync(async function(req, res, next) {
       }
     ],
     mode: 'payment',
-    success_url: `${req.protocol}://${req.get('host')}/?tour=${tour._id}&user=${req.user._id}&price=${tour.price}`,
+    // success_url: `${req.protocol}://${req.get('host')}/?tour=${tour._id}&user=${req.user._id}&price=${tour.price}`,
+    success_url: `${req.protocol}://${req.get('host')}/`,
     cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: tourId
@@ -57,21 +59,47 @@ exports.createPaymentSession = catchAsync(async function(req, res, next) {
   });
 });
 
-exports.createBookingCheckout = catchAsync(async function(req, res, next) {
-  /* TEMPORARY SOLUTION. This one is insecure */
-  const { tour, user, price } = req.query;
+//
+// exports.createBookingCheckout = catchAsync(async function(req, res, next) {
+//   /* TEMPORARY SOLUTION. This one is insecure */
+//   const { tour, user, price } = req.query;
+//
+//   if (!mongoose.isValidObjectId(tour) || !mongoose.isValidObjectId(user) || !price) {
+//     return next();
+//   }
+//
+//   await Booking.create({ tour, user, price });
+//
+//   res.redirect(req.originalUrl.split(`?`)[0]);
+//
+// });
 
-  if (!mongoose.isValidObjectId(tour) || !mongoose.isValidObjectId(user) || !price) {
-    return next();
-  }
+async function createBookingCheckout(session) {
+  const tour = session.client_reference_id;
+  const userEmail = session.customer_email;
+  const user = (await User.find({ email: userEmail })).id;
+  const { price } = session.line_items[0];
 
   await Booking.create({ tour, user, price });
-
-  res.redirect(req.originalUrl.split(`?`)[0]);
-
-});
+}
 
 exports.webhookCheckout = catchAsync(async function(req, res, next) {
+  const signature = req.headers(`stripe-signature`);
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET);
+
+  } catch (e) {
+    return res.status(400).send(`Webhook error: ${e.message}`);
+  }
+
+  if (event.type === `checkout.session.completed`) {
+    createBookingCheckout(event.data.object);
+  }
+  res.status(200).json({ received: true });
 });
 
 

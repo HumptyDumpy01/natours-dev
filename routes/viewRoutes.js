@@ -8,14 +8,14 @@ const {
   getMyBookings
 } = require('../controllers/viewController');
 const { isLoggedIn, protect } = require('../controllers/authController');
-const { createBookingCheckout } = require('../controllers/bookingController');
+// const { createBookingCheckout } = require('../controllers/bookingController');
 
 // import the router from express
 const router = express.Router();
 
 // router.use(isLoggedIn);
 /* TEMPORARY */
-router.get(`/`, createBookingCheckout, isLoggedIn, getOverview);
+router.get(`/`, /*createBookingCheckout,*/ isLoggedIn, getOverview);
 // router.get(`/`, isLoggedIn, getOverview);
 
 router.get(`/tours/:slug`, isLoggedIn, getTour);
