@@ -9,6 +9,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const compression = require('compression');
+const cors = require('cors');
 
 const AppError = require(`${__dirname}/utils/appError`);
 
@@ -28,6 +29,26 @@ app.set(`view engine`, `pug`);
 // We do not always know whether the path contains "/" or not. So path.join prevents
 // us from this sort of bug
 app.set(`views`, path.join(__dirname, `views`));
+
+// the empty cors() enables using of our APIs from any domain
+// if you want to add it only to a specific route, then add cors() as a part of
+// route middleware
+app.use(cors());
+
+// this is necessary to enable "options" request for not simple crud operations like
+// patch, put, delete
+app.options(`*`, cors());
+
+// we can also specify the options allowed for a specific domain or a route(!)
+// app.options(`https://www.natours.com`, cors());
+// app.options(`/api/v1/tours/:id`, cors());
+
+// specify a specific domain
+/*
+app.use(cors({
+  origin: `https://www.natours.com`
+}));
+*/
 
 const userRouter = require(`${__dirname}/routes/userRoutes`);
 const tourRouter = require(`${__dirname}/routes/tourRoutes`);

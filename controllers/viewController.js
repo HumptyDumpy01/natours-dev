@@ -3,7 +3,6 @@ const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
-const mongoose = require('mongoose');
 const Booking = require('../models/bookingModel');
 
 // create your controller that would be attached to the route
