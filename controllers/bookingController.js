@@ -79,7 +79,7 @@ async function createBookingCheckout(session) {
   console.log(`Executing tour: `, tour);
   const userEmail = session.customer_email;
   console.log(`Executing userEmail: `, userEmail);
-  const user = await User.findOne({ email: userEmail });
+  const user = (await User.findOne({ email: session.customer_email }))._id;
   console.log(`Executing user: `, user);
   const price = session.line_items[0].amount_total / 100;
   console.log(`Executing price: `, price);
@@ -105,7 +105,7 @@ exports.webhookCheckout = catchAsync(async function(req, res, next) {
   // console.log(`Executing event.data.object: `, event.data.object);
   switch (event.type) {
     case 'checkout.session.completed':
-      createBookingCheckout(event.data.object);
+      await createBookingCheckout(event.data.object);
       // Then define and call a function to handle the event checkout.session.completed
       break;
     // ... handle other event types
