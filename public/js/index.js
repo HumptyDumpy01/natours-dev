@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
       try {
         const res = await axios({
           method: 'PATCH',
-          url: 'http://localhost:8001/api/v1/users/auth/updateMe',
+          url: '/api/v1/users/auth/updateMe',
           data: formData,
           headers: {
             'Content-Type': 'multipart/form-data'
