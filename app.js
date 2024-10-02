@@ -36,6 +36,9 @@ app.set(`views`, path.join(__dirname, `views`));
 // route middleware
 app.use(cors());
 
+// enable proxy
+app.enable(`trust proxy`);
+
 // this is necessary to enable "options" request for not simple crud operations like
 // patch, put, delete
 app.options(`*`, cors());
