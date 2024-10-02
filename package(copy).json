@@ -4,7 +4,7 @@
   "description": "This is a Natours API Application",
   "main": "app.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "cross-env NODE_ENV=development nodemon server.js",
     "start:prod": "cross-env NODE_ENV=production nodemon server.js",
     "lint": "eslint .",
     "debug": "ndb server.js",
