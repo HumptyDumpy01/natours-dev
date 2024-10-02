@@ -84,22 +84,33 @@ async function createBookingCheckout(session) {
 }
 
 exports.webhookCheckout = catchAsync(async function(req, res, next) {
-  const signature = req.headers(`stripe-signature`);
+  const sig = req.headers['stripe-signature'];
+
   let event;
+
   try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      signature,
-      process.env.STRIPE_WEBHOOK_SECRET);
-
-  } catch (e) {
-    return res.status(400).send(`Webhook error: ${e.message}`);
+    event = stripe.webhooks.constructEvent(req.body, sig, process.env.STRIPE_WEBHOOK_SECRET);
+  } catch (err) {
+    res.status(400).send(`Webhook Error: ${err.message}`);
+    return;
   }
 
-  if (event.type === `checkout.session.completed`) {
-    createBookingCheckout(event.data.object);
+  // Handle the event
+  switch (event.type) {
+    case 'checkout.session.completed':
+
+      if (event.data.object) {
+        createBookingCheckout(event.data.object);
+      }
+      // Then define and call a function to handle the event checkout.session.completed
+      break;
+    // ... handle other event types
+    default:
+      console.log(`Unhandled event type ${event.type}`);
   }
-  res.status(200).json({ received: true });
+
+  // Return a 200 response to acknowledge receipt of the event
+  res.send();
 });
 
 
