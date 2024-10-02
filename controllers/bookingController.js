@@ -76,11 +76,11 @@ exports.createPaymentSession = catchAsync(async function(req, res, next) {
 
 async function createBookingCheckout(session) {
   const tour = session.client_reference_id;
-  // console.log(`Executing tour: `, tour);
+  console.log(`Executing tour: `, tour);
   const userEmail = session.customer_email;
-  // console.log(`Executing userEmail: `, userEmail);
-  const user = await User.findOne({ email: session.customer_email }).id;
-  // console.log(`Executing user: `, user);
+  console.log(`Executing userEmail: `, userEmail);
+  const user = await User.findOne({ email: userEmail });
+  console.log(`Executing user: `, user);
   const price = session.line_items[0].amount_total / 100;
   console.log(`Executing price: `, price);
 
