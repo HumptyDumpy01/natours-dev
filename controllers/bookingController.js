@@ -80,7 +80,3 @@ exports.getAllBookings = factory.getAll(Booking);
 exports.updateBooking = factory.updateOne(Booking, `Failed to update the booking!`, `Successfully updated booking!`);
 
 exports.deleteBooking = factory.deleteOne(Booking, `Failed to delete the booking!`);
-
-
-
-
