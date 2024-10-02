@@ -78,7 +78,7 @@ async function createBookingCheckout(session) {
   const tour = session.client_reference_id;
   const userEmail = session.customer_email;
   const user = (await User.find({ email: userEmail })).id;
-  const { price } = session.line_items[0];
+  const price = session.line_items[0].amount_total / 100;
 
   await Booking.create({ tour, user, price });
 }
@@ -96,9 +96,9 @@ exports.webhookCheckout = catchAsync(async function(req, res, next) {
   }
 
   // Handle the event
-  console.log(`Executing event.type: `, event.type);
-  console.log(`Executing event.data: `, event.data);
-  console.log(`Executing event.data.object: `, event.data.object);
+  // console.log(`Executing event.type: `, event.type);
+  // console.log(`Executing event.data: `, event.data);
+  // console.log(`Executing event.data.object: `, event.data.object);
   switch (event.type) {
     case 'checkout.session.completed':
       createBookingCheckout(event.data.object);
