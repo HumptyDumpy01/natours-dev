@@ -8,7 +8,7 @@ const stripePromise = loadStripe(`pk_test_51Q5SwYDCNxL2XOwanZ3tQyiVU1UgyOQ5uSaLX
 export async function bookTour(tourId) {
   try {
     /*  1. Get checkout session from API */
-    const session = await axios(`http://localhost:8001/api/v1/bookings/checkout-session/${tourId}`);
+    const session = await axios(`/api/v1/bookings/checkout-session/${tourId}`);
 
     // console.log(`Executing session: `, session);
 
