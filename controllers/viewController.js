@@ -10,14 +10,8 @@ exports.alerts = catchAsync(async function(req, res, next) {
   if (alert === `booking`) {
     res.locals.alert = `Your Booking was successful! Please checkout your email for a confirmation! \n
     If you book does not appear immediately, please come back later.`;
-    next();
   }
-
-  res.status(200).json({
-    status: `success`,
-    data: {},
-    message: ``
-  });
+  next();
 });
 
 
