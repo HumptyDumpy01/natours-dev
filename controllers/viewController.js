@@ -5,6 +5,22 @@ const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
 const Booking = require('../models/bookingModel');
 
+exports.alerts = catchAsync(async function(req, res, next) {
+  const { alert } = req.query;
+  if (alert === `booking`) {
+    res.locals.alert = `Your Booking was successful! Please checkout your email for a confirmation! \n
+    If you book does not appear immediately, please come back later.`;
+    next();
+  }
+
+  res.status(200).json({
+    status: `success`,
+    data: {},
+    message: ``
+  });
+});
+
+
 // create your controller that would be attached to the route
 exports.getOverview = catchAsync(async function(req, res, next) {
   /* 1. Get Tour data from collection */

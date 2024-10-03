@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const mapBox = document.querySelector('#map');
   const logOutButton = document.querySelector('.nav__el--logout');
   const bookBtn = document.querySelector(`#book-tour`);
+  const alertMessage = document.querySelector(`body`).dataset.alert;
 
   if (mapBox) {
     const locations = JSON.parse(document.getElementById('map').dataset.locations);
@@ -82,6 +83,10 @@ document.addEventListener('DOMContentLoaded', function() {
       const { tourId } = e.target.dataset;
       bookTour(tourId);
     });
+  }
+
+  if (alertMessage) {
+    showAlert(`success`, alertMessage, 13);
   }
 
   if (logOutButton) {

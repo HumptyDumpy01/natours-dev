@@ -47,7 +47,7 @@ exports.createPaymentSession = catchAsync(async function(req, res, next) {
     ],
     mode: 'payment',
     // success_url: `${req.protocol}://${req.get('host')}/?tour=${tour._id}&user=${req.user._id}&price=${tour.price}`,
-    success_url: `${req.protocol}://${req.get('host')}/`,
+    success_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}/?alert=booking`,
     cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: tourId
@@ -76,13 +76,13 @@ exports.createPaymentSession = catchAsync(async function(req, res, next) {
 
 async function createBookingCheckout(session) {
   const tour = session.client_reference_id;
-  console.log(`Executing tour: `, tour);
+  // console.log(`Executing tour: `, tour);
   const userEmail = session.customer_email;
-  console.log(`Executing userEmail: `, userEmail);
-  const user = (await User.findOne({ email: session.customer_email }))._id;
-  console.log(`Executing user: `, user);
+  // console.log(`Executing userEmail: `, userEmail);
+  const user = (await User.findOne({ email: userEmail }))._id;
+  // console.log(`Executing user: `, user);
   const price = session.amount_total / 100;
-  console.log(`Executing price: `, price);
+  // console.log(`Executing price: `, price);
 
   await Booking.create({ tour, user, price });
 }
@@ -102,7 +102,7 @@ exports.webhookCheckout = catchAsync(async function(req, res, next) {
   // Handle the event
   // console.log(`Executing event.type: `, event.type);
   // console.log(`Executing event.data: `, event.data);
-  console.log(`Executing event.data.object: `, event.data.object);
+  // console.log(`Executing event.data.object: `, event.data.object);
   switch (event.type) {
     case 'checkout.session.completed':
       await createBookingCheckout(event.data.object);

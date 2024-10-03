@@ -4,14 +4,14 @@ export function showAlert(type, msg) {
   document.querySelector(`body`).insertAdjacentHTML(`afterbegin`, markup);
 }
 
-export function hideAlert() {
+export function hideAlert(time = 5) {
   const el = document.querySelector(`.alert`);
   if (el) {
     return el.parentElement.removeChild(el);
   }
   window.setTimeout(function() {
     hideAlert();
-  }, 5_000);
+  }, time * 1000);
 }
 
 

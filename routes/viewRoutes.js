@@ -5,13 +5,16 @@ const {
   getLogin,
   getAccount,
   updateUserData,
-  getMyBookings
+  getMyBookings,
+  alerts
 } = require('../controllers/viewController');
 const { isLoggedIn, protect } = require('../controllers/authController');
 // const { createBookingCheckout } = require('../controllers/bookingController');
 
 // import the router from express
 const router = express.Router();
+
+router.use(alerts);
 
 // router.use(isLoggedIn);
 /* TEMPORARY */
