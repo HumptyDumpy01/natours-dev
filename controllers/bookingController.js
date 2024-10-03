@@ -47,7 +47,7 @@ exports.createPaymentSession = catchAsync(async function(req, res, next) {
     ],
     mode: 'payment',
     // success_url: `${req.protocol}://${req.get('host')}/?tour=${tour._id}&user=${req.user._id}&price=${tour.price}`,
-    success_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}/?alert=booking`,
+    success_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}?alert=booking`,
     cancel_url: `${req.protocol}://${req.get('host')}/tours/${tour.slug}`,
     customer_email: req.user.email,
     client_reference_id: tourId
